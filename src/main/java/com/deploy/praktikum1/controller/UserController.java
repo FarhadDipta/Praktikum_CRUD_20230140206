@@ -25,7 +25,7 @@ public class UserController {
     )
     public ResponseEntity<Map<String, Object>> AddUser(@RequestBody UserAddRequest request){
 
-        UserDto result = userService.AddUser(request);
+        UserDto result = userService.addUser(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 "status", "success",
@@ -71,7 +71,7 @@ public class UserController {
             @RequestBody UserAddRequest request
     ){
 
-        UserDto result = userService.UpdateUser(id, request);
+        UserDto result = userService.updateUser(id, request);
 
         return ResponseEntity.status(HttpStatus.OK).body(Map.of(
                 "status", "success",
@@ -85,7 +85,7 @@ public class UserController {
     )
     public ResponseEntity<Map<String, Object>> DeleteUser(@PathVariable("id") String id){
 
-        userService.DeleteUser(id);
+        userService.deleteUser(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(Map.of(
                 "status", "success delete user with id " + id

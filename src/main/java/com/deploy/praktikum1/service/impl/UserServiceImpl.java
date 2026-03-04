@@ -1,4 +1,4 @@
-package com.deploy.praktikum1.service.Impl;
+package com.deploy.praktikum1.service.impl;
 
 import com.deploy.praktikum1.mapper.UserMapper;
 import com.deploy.praktikum1.model.dto.UserAddRequest;
@@ -27,33 +27,26 @@ public class UserServiceImpl implements UserService {
     public UserDto addUser(UserAddRequest request) {
         validationUtil.validate(request);
 
-        User saveUser = User.builder()
+        User user = User.builder()
                 .id(UUID.randomUUID().toString())
                 .name(request.getName())
                 .age(request.getAge())
                 .build();
 
-        userRepository.save(saveUser);
-
-        UserDto userDto = UserMapper.MAPPER.toUserDtoData(saveUser);
-        return userDto;
-    }
-
-    @Override
-    public UserDto AddUser(UserAddRequest request) {
-        return null;
+        userRepository.save(user);
+        return UserMapper.MAPPER.toUserDtoData(user);
     }
 
     @Override
     public List<UserDto> getAllUser() {
         List<User> users = userRepository.findAll();
-        List<UserDto> userDto = new ArrayList<>();
+        List<UserDto> result = new ArrayList<>();
 
         for (User user : users) {
-            userDto.add(UserMapper.MAPPER.toUserDtoData(user));
+            result.add(UserMapper.MAPPER.toUserDtoData(user));
         }
 
-        return userDto;
+        return result;
     }
 
     @Override
@@ -65,31 +58,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto UpdateUser(String id, UserAddRequest request) {
-        return null;
-    }
-
-    @Override
-    public void DeleteUser(String id) {
-
-    }
-
-    @Override
     public UserDto updateUser(String id, UserAddRequest request) {
         validationUtil.validate(request);
 
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("user not found"));
 
-        User user = User.builder()
-                .id(existingUser.getId())
-                .name(request.getName())
-                .age(request.getAge())
-                .build();
+        existingUser.setName(request.getName());
+        existingUser.setAge(request.getAge());
 
-        userRepository.save(user);
-
-        return UserMapper.MAPPER.toUserDtoData(user);
+        userRepository.save(existingUser);
+        return UserMapper.MAPPER.toUserDtoData(existingUser);
     }
 
     @Override
